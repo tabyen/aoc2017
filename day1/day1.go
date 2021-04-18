@@ -13,6 +13,7 @@ import (
     "strings"
 )
 
+// GetInput gets the input data and returns it as a string.
 func GetInput() string {
   dat, err := ioutil.ReadFile("input")
   if err != nil {
@@ -21,14 +22,20 @@ func GetInput() string {
   return string(dat)
 }
 
-func getNext(myincr int,  mycurr int,  mysize int) int {
+// getNext returns the index for the value we need to compare with the
+// current value.  Simple imcrementing wont work since we will get
+// array index out of bounds errors.  getNext handles the index for the next
+// value when skip is 1 and we are already at the end of the array,
+// as well as the case where skip is half the size of the array.
+func GetNext(myincr int,  mycurr int,  mysize int) int {
   if (mycurr + myincr) > mysize {
     return ((mycurr + myincr) - mysize) -1
   }
   return mycurr + myincr
 }
 
-func getCaptcha(data []string, partNo int) int {
+// getCatpcha calculates the captcha for either part of day1
+func GetCaptcha(data []string, partNo int) int {
   skip := 1
   fmt.Sprint(skip)
   if (partNo == 2) {
@@ -42,7 +49,7 @@ func getCaptcha(data []string, partNo int) int {
     if err != nil {
       log.Fatal(err)
     }
-    next, err = strconv.Atoi(data[getNext(skip, i, inputLen)])
+    next, err = strconv.Atoi(data[GetNext(skip, i, inputLen)])
 
     if (curr == next) {
       total += curr
@@ -57,6 +64,6 @@ func main() {
   inputArray := strings.Split(strings.Trim(dat, "\n"), "")
 
   fmt.Print("Part 1:\n")
-  fmt.Printf("CAPTCHA: %d\n", getCaptcha(inputArray, 1))
-  fmt.Printf("CAPTCHA: %d\n", getCaptcha(inputArray, 2))
+  fmt.Printf("CAPTCHA: %d\n", GetCaptcha(inputArray, 1))
+  fmt.Printf("CAPTCHA: %d\n", GetCaptcha(inputArray, 2))
 }
